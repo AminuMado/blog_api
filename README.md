@@ -18,8 +18,6 @@ The backend is built out using Node.js and the Express framework. The frontend u
 - Client side form validation using react-hook-form before submitting user data.
 - Schema validation using Mongoose.
 
----
-
 ## Learnings
 
 > The importance of returning back good JSON, it should be exactly what is needed and requested- nothing more.
@@ -34,3 +32,5 @@ The backend is built out using Node.js and the Express framework. The frontend u
 
 - MERN Stack
 - API deployed using Heroku
+
+---
