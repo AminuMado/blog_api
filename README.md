@@ -19,3 +19,18 @@ The backend is built out using Node.js and the Express framework. The frontend u
 - Schema validation using Mongoose.
 
 ---
+
+## Learnings
+
+> The importance of returning back good JSON, it should be exactly what is needed and requested- nothing more.
+
+> The power an API can offer in terms of decoupling the backend and frontend eg: using a seperate CMS to add, update and delete posts & comments.
+
+> How to create and store JWT tokens and the flexibility they offer in terms of accessing an API
+
+> The importance of UseEffect in cleaning up async requests that are yet to be processed- avoiding memory leaks
+
+## Built using
+
+- MERN Stack
+- API deployed using Heroku
