@@ -8,4 +8,8 @@ const userSchema = new Schema({
   admin: { type: Boolean, default: false },
 });
 
-module.exports = mongoose.model("User", userSchema);
+// Create a model
+const User = mongoose.model("User", userSchema);
+
+// Export model
+module.exports = User;

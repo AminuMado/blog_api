@@ -1,6 +1,10 @@
+// Requre mongoose
 const mongoose = require("mongoose");
+
+// Define a schema
 const Schema = mongoose.Schema;
 
+// Create a schema
 const blogSchema = new Schema(
   {
     title: { type: String, required: true },
@@ -14,3 +18,12 @@ const blogSchema = new Schema(
 );
 
 module.exports = mongoose.model("Blog", blogSchema);
+
+// Virtual for blog
+// blogSchema.pre().get(function () {});
+
+// Create a model
+const Blog = mongoose.model("Blog", blogSchema);
+
+// Export model
+module.exports = Blog;
