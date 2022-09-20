@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { body, validationResult } = require("express-validator");
 const Blog = require("../models/blogModel");
+const Comment = require("../models/commentModel");
+const User = require("../models/userModel");
 
 /* --------- Create a Comment --------- */
 
@@ -10,7 +12,7 @@ const createComment = [
   body("content")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("Content must not be empty"),
+    .withMessage("Comment must not be empty"),
 
   //Process request after validation and sanitization
   async (req, res) => {
@@ -20,16 +22,24 @@ const createComment = [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    // input fields are the title,the content and a publish boolean we need to address those
     // Get the current user This will be done when youre signed in using jwt authorization so for now lets take create a dummy user and use it as the default
     const { content } = req.body;
-    const id = "63298c7b5ae2a003d32fd904"; // dummy user
-    const author = await User.findById(id);
-    const blog = await Blog.findById("6329aa83fe4caa8bd6e9cebb");
+    const { id } = req.params;
+    const blog = await Blog.findById(id);
+    const userId = "63298c7b5ae2a003d32fd904"; // dummy user
+    const author = await User.findById(userId);
     // Add to the database
     try {
-      const blog = await Blog.create({ content, author, blog });
-      return res.status(200).json(blog);
+      const comment = await Comment.create({ content, author, blog });
+      // Find the Blog and add the created comment into it.
+      await Blog.findOneAndUpdate(
+        { _id: id },
+        { $push: { comments: comment } }
+      );
+      if (!blog) {
+        return res.status(400).json({ error: "Blog not found" });
+      }
+      return res.status(200).json(comment);
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }
