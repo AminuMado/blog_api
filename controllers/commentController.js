@@ -1,6 +1,8 @@
-/* --------- Create a Comment --------- */
-
+const mongoose = require("mongoose");
+const { body, validationResult } = require("express-validator");
 const Blog = require("../models/blogModel");
+
+/* --------- Create a Comment --------- */
 
 const createComment = [
   // validate and sanitize input fields
@@ -37,3 +39,5 @@ const createComment = [
 /* --------- Delete a Comment--------- */
 
 const deleteComment = async (req, res) => {};
+
+module.exports = { createComment, deleteComment };
