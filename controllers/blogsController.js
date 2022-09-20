@@ -26,7 +26,7 @@ const getBlog = async (req, res) => {
   }
 
   // Find the Blog
-  const blog = await Blog.findById(id);
+  const blog = await Blog.findById(id).populate("comments").populate("likes");
   if (!blog) {
     return res.status(404).json({ error: "Blog not found" });
   }
@@ -74,16 +74,93 @@ const createBlog = [
 
 /* --------- Update a Blog --------- */
 
-const updateBlog = async (req, res) => {};
+const updateBlog = async (req, res) => {
+  const { id } = req.params;
+
+  // Check if ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Blog not Found" });
+  }
+
+  // Find the Blog and Update
+  const blog = await Blog.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+  if (!blog) {
+    return res.status(400).json({ error: "Blog not found" });
+  }
+  // Success... Blog has been updated.
+  res.status(200).json(blog);
+};
 
 /* --------- Delete a Blog --------- */
 
-const deleteBlog = async (req, res) => {};
+const deleteBlog = async (req, res) => {
+  const { id } = req.params;
 
+  // Check if ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Blog not Found" });
+  }
+
+  // Find the Blog and Delete
+  const blog = await Blog.findOneAndDelete({ _id: id });
+  if (!blog) {
+    return res.status(400).json({ error: "Blog not found" });
+  }
+
+  // Success... Blog has been deleted.
+  res.status(200).json(blog);
+};
+
+/* --------- Like a Blog --------- */
+
+const likeBlog = async (req, res) => {
+  const { id } = req.params;
+  // We need to find the currentuser from the jwt token but for now i am hardcoding the my user Id
+  const userId = "63298c7b5ae2a003d32fd904";
+  // Check if ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Blog not Found" });
+  }
+  const blog = await Blog.findOneAndUpdate(
+    { _id: id },
+    { $addToSet: { likes: userId } }
+  );
+  if (!blog) {
+    return res.status(400).json({ error: "Blog not found" });
+  }
+  return res.status(200).json(blog);
+};
+
+/* --------- Unlike a Blog --------- */
+
+const unLikeBlog = async (req, res) => {
+  const { id } = req.params;
+  // We need to find the currentuser from the jwt token but for now i am hardcoding the my user Id
+  const userId = "63298c7b5ae2a003d32fd904";
+  // Check if ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Blog not Found" });
+  }
+  const blog = await Blog.findOneAndUpdate(
+    { _id: id },
+    { $pull: { likes: userId } }
+  );
+  if (!blog) {
+    return res.status(400).json({ error: "Blog not found" });
+  }
+  return res.status(200).json(blog);
+};
 module.exports = {
   getBlogs,
   getBlog,
   createBlog,
   deleteBlog,
   updateBlog,
+  likeBlog,
+  unLikeBlog,
 };
