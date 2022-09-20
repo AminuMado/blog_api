@@ -1,10 +1,17 @@
 const mongoose = require("mongoose");
+const { body, validationResult } = require("express-validator");
+
 const Blog = require("../models/blogModel");
+const User = require("../models/userModel");
+const Comment = require("../models/commentModel");
 
 /* --------- Get all Blogs --------- */
 
 const getBlogs = async (req, res) => {
-  const blogs = await Blog.find({}).sort({ createdAt: -1 });
+  const blogs = await Blog.find({})
+    .sort({ createdAt: -1 })
+    .populate("comments")
+    .populate("likes");
   res.status(200).json(blogs);
 };
 
@@ -25,23 +32,45 @@ const getBlog = async (req, res) => {
   }
 
   // Success... Blog has been found.
-  res.status(200).json(Blog);
+  res.status(200).json(blog);
 };
 
 /* --------- Create a Blog --------- */
 
-const createBlog = async (req, res) => {
-  // Get the current user This will be done when youre signed in using jwt authorization so for now lets take create a dummy user and use it as the default
-  const { title, content } = req.body;
-  const author = User.findById();
-  // Add to the database
-  try {
-    const blog = await Blog.create({ title, content, author });
-    res.status(200).json(Blog);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+const createBlog = [
+  // validate and sanitize input fields
+
+  body("title")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Title must not be empty"),
+  body("content")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Content must not be empty"),
+
+  //Process request after validation and sanitization
+  async (req, res) => {
+    // Extract the validation errors from a request
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // input fields are the title,the content and a publish boolean we need to address those
+    // Get the current user This will be done when youre signed in using jwt authorization so for now lets take create a dummy user and use it as the default
+    const { title, content, published } = req.body;
+    const id = "63298c7b5ae2a003d32fd904"; // dummy user
+    const author = await User.findById(id);
+    // Add to the database
+    try {
+      const blog = await Blog.create({ title, content, author, published });
+      return res.status(200).json(blog);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  },
+];
 
 /* --------- Update a Blog --------- */
 
