@@ -51,4 +51,4 @@ app.use((req, res, next) => {
 
 app.use("/api/blogs", blogRoutes);
 app.use("/api/user", userRoutes);
-app.use("/api/comment", commentRoutes);
+app.use("/api/blog", commentRoutes);
