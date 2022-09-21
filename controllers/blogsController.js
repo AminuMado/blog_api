@@ -10,6 +10,7 @@ const Comment = require("../models/commentModel");
 const getBlogs = async (req, res) => {
   const blogs = await Blog.find({})
     .sort({ createdAt: -1 })
+    .populate("author")
     .populate("comments")
     .populate("likes");
   res.status(200).json(blogs);
