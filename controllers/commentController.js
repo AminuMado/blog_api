@@ -4,6 +4,17 @@ const Blog = require("../models/blogModel");
 const Comment = require("../models/commentModel");
 const User = require("../models/userModel");
 
+/* --------- Get all comments --------- */
+
+const getComments = async (req, res) => {
+  const userId = "63298c7b5ae2a003d32fd904";
+  const comments = await Comment.find({ author: userId })
+    .sort({ createdAt: -1 })
+    .populate("author")
+    .populate("blog");
+  res.status(200).json(comments);
+};
+
 /* --------- Create a Comment --------- */
 
 const createComment = [
@@ -23,9 +34,8 @@ const createComment = [
     }
 
     // Get the current user This will be done when youre signed in using jwt authorization so for now lets take create a dummy user and use it as the default
-    const { content } = req.body;
-    const { id } = req.params;
-    const blog = await Blog.findById(id);
+    const { content, blogId } = req.body;
+    const blog = await Blog.findById(blogid);
     const userId = "63298c7b5ae2a003d32fd904"; // dummy user
     const author = await User.findById(userId);
     // Add to the database
@@ -33,7 +43,7 @@ const createComment = [
       const comment = await Comment.create({ content, author, blog });
       // Find the Blog and add the created comment into it.
       await Blog.findOneAndUpdate(
-        { _id: id },
+        { _id: blogId },
         { $push: { comments: comment } }
       );
       if (!blog) {
@@ -48,6 +58,22 @@ const createComment = [
 
 /* --------- Delete a Comment--------- */
 
-const deleteComment = async (req, res) => {};
+const deleteComment = async (req, res) => {
+  const { id } = req.params;
 
-module.exports = { createComment, deleteComment };
+  // Check if ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "Comment not Found" });
+  }
+
+  // Find the Comment and Delete
+  const comment = await Comment.findOneAndDelete({ _id: id });
+  if (!comment) {
+    return res.status(400).json({ error: "Comment not found" });
+  }
+
+  // Success... Comment has been deleted.
+  res.status(200).json(comment);
+};
+
+module.exports = { getComments, createComment, deleteComment };
