@@ -33,4 +33,14 @@ The backend is built out using Node.js and the Express framework. The frontend u
 - MERN Stack
 - API deployed using Heroku
 
+## Links
+
+<p>
+<a href="#" target="_blank" rel="noopener noreferrer"> 🔗 View the project here!</a>
+👀
+
+<a href="https://github.com/AminuMado/blog_client" target="_blank" rel="noopener noreferrer">🔗 Blog Client</a>
+
+## </p>
+
 ---
