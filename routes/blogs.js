@@ -23,12 +23,12 @@ router.patch("/:id", blogsController.updateBlog);
 
 router.delete("/:id", blogsController.deleteBlog);
 
-/* --------- Like a Blog --------- */
+// /* --------- Like a Blog --------- */
 
-router.post("/:id/like", blogsController.likeBlog);
+// router.post("/:id/like", blogsController.likeBlog);
 
-/* --------- Unlike a Blog --------- */
+// /* --------- Unlike a Blog --------- */
 
-router.post("/:id/unlike", blogsController.unLikeBlog);
+// router.post("/:id/unlike", blogsController.unLikeBlog);
 
 module.exports = router;
