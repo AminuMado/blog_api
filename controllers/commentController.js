@@ -8,10 +8,9 @@ const User = require("../models/userModel");
 
 const getComments = async (req, res) => {
   const userId = "63298c7b5ae2a003d32fd904";
-  const comments = await Comment.find({ author: userId })
-    .sort({ createdAt: -1 })
-    .populate("author")
-    .populate("blog");
+  const comments = await Comment.find({ author: userId }).sort({
+    createdAt: -1,
+  });
   res.status(200).json(comments);
 };
 
@@ -35,12 +34,13 @@ const createComment = [
 
     // Get the current user This will be done when youre signed in using jwt authorization so for now lets take create a dummy user and use it as the default
     const { content, blogId } = req.body;
-    const blog = await Blog.findById(blogid);
+    const blog = await Blog.findById(blogId);
     const userId = "63298c7b5ae2a003d32fd904"; // dummy user
     const author = await User.findById(userId);
+    const username = author.username;
     // Add to the database
     try {
-      const comment = await Comment.create({ content, author, blog });
+      const comment = await Comment.create({ content, username, blog });
       // Find the Blog and add the created comment into it.
       await Blog.findOneAndUpdate(
         { _id: blogId },
