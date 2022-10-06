@@ -10,9 +10,9 @@ const blogSchema = new Schema(
     title: { type: String, required: true },
     content: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
-    likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     published: { type: Boolean, default: false },
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    // likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );
