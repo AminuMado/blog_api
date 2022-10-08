@@ -7,6 +7,10 @@ const blogsController = require("../controllers/blogsController");
 
 router.get("/", blogsController.getBlogs);
 
+/* --------- Get all Blogs For User --------- */
+
+router.get("/profile", blogsController.getBlogsForUser);
+
 /* --------- Get a single Blog --------- */
 
 router.get("/:id", blogsController.getBlog);
