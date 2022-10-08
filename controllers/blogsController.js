@@ -13,6 +13,18 @@ const getBlogs = async (req, res) => {
   res.status(200).json(blogs);
 };
 
+/* --------- Get all Blogs for user--------- */
+
+const getBlogsForUser = async (req, res) => {
+  //Todo fix me later not final
+  //This is hardcoded for now but when the authentication is set up it will be based on whos logged in at the moment
+  const currentUser = "63298c7b5ae2a003d32fd904";
+  const blogs = await Blog.find({ author: currentUser })
+    .sort({ createdAt: -1 })
+    .populate("author");
+  // .populate("comments");
+  res.status(200).json(blogs);
+};
 /* --------- Get a single Blog --------- */
 
 const getBlog = async (req, res) => {
@@ -157,6 +169,7 @@ const deleteBlog = async (req, res) => {
 // };
 module.exports = {
   getBlogs,
+  getBlogsForUser,
   getBlog,
   createBlog,
   deleteBlog,
