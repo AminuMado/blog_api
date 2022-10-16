@@ -6,13 +6,13 @@ const User = require("../models/userModel");
 
 /* --------- Get all comments --------- */
 
-const getComments = async (req, res) => {
-  const userId = "63298c7b5ae2a003d32fd904";
-  const comments = await Comment.find({ author: userId }).sort({
-    createdAt: -1,
-  });
-  res.status(200).json(comments);
-};
+// const getComments = async (req, res) => {
+//   const { blogId } = req.body;
+//   const comments = await Comment.find({ blog: blogId }).sort({
+//     createdAt: -1,
+//   });
+//   res.status(200).json(comments);
+// };
 
 /* --------- Create a Comment --------- */
 
@@ -35,9 +35,7 @@ const createComment = [
     // Get the current user This will be done when youre signed in using jwt authorization so for now lets take create a dummy user and use it as the default
     const { content, blogId } = req.body;
     const blog = await Blog.findById(blogId);
-    const userId = "63298c7b5ae2a003d32fd904"; // dummy user
-    const author = await User.findById(userId);
-    const username = author.username;
+    const username = req.user.username;
     // Add to the database
     try {
       const comment = await Comment.create({ content, username, blog });
@@ -80,4 +78,4 @@ const deleteComment = async (req, res) => {
   res.status(200).json(comment);
 };
 
-module.exports = { getComments, createComment, deleteComment };
+module.exports = { createComment, deleteComment };
