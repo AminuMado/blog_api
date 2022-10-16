@@ -11,7 +11,7 @@ const requireAuth = async (req, res, next) => {
     // verify the token
     const { _id } = jwt.verify(token, process.env.SECRET);
     // set the user on the request object with only the id field
-    req.user = await User.findOne({ _id }).select("_id");
+    req.user = await User.findOne({ _id });
     next();
   } catch (error) {
     console.log(error);
