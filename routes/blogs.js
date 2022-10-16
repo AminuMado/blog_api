@@ -2,6 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 const blogsController = require("../controllers/blogsController");
+const requireAuth = require("../middleware/requireAuth");
+/* --------- Authentication for all blog routes --------- */
+router.use(requireAuth);
 
 /* --------- Get all Blogs --------- */
 
