@@ -2,13 +2,12 @@ const mongoose = require("mongoose");
 const { body, validationResult } = require("express-validator");
 
 const Blog = require("../models/blogModel");
-const User = require("../models/userModel");
-const Comment = require("../models/commentModel");
 
 /* --------- Get all Blogs --------- */
 
 const getBlogs = async (req, res) => {
-  const blogs = await Blog.find({}).sort({ createdAt: -1 }).populate("author");
+  const blogs = await Blog.find({}).sort({ createdAt: -1 });
+  // .populate("author");
   // .populate("comments");
   res.status(200).json(blogs);
 };
@@ -16,9 +15,8 @@ const getBlogs = async (req, res) => {
 /* --------- Get all Blogs for user--------- */
 
 const getBlogsForUser = async (req, res) => {
-  //Todo fix me later not final
-  //This is hardcoded for now but when the authentication is set up it will be based on whos logged in at the moment
-  const currentUser = "63298c7b5ae2a003d32fd904";
+  // We set the current user from the require auth middleware
+  const currentUser = req.user;
   const blogs = await Blog.find({ author: currentUser })
     .sort({ createdAt: -1 })
     .populate("author");
@@ -68,12 +66,10 @@ const createBlog = [
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
-    // input fields are the title,the content and a publish boolean we need to address those
-    // Get the current user This will be done when youre signed in using jwt authorization so for now lets take create a dummy user and use it as the default
+    // get the required values from the request
     const { title, content, published } = req.body;
-    const id = "63298c7b5ae2a003d32fd904"; // dummy user
-    const author = await User.findById(id);
+    // current user is gotten from the requireAuth middleware
+    const author = req.user;
     // Add to the database
     try {
       const blog = await Blog.create({ title, content, author, published });
