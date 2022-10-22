@@ -6,8 +6,7 @@ const Blog = require("../models/blogModel");
 /* --------- Get all Blogs --------- */
 
 const getBlogs = async (req, res) => {
-  const blogs = await Blog.find({}).sort({ createdAt: -1 });
-  // .populate("author");
+  const blogs = await Blog.find({}).sort({ createdAt: -1 }).populate("author");
   // .populate("comments");
   res.status(200).json(blogs);
 };
