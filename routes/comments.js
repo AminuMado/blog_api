@@ -2,6 +2,10 @@ const express = require("express");
 
 const router = express.Router();
 const commentController = require("../controllers/commentController");
+const requireAuth = require("../middleware/requireAuth");
+
+/* --------- Authentication for all blog routes --------- */
+router.use(requireAuth);
 
 /* --------- Post a Comment--------- */
 
