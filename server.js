@@ -9,7 +9,7 @@ const compression = require("compression");
 const helmet = require("helmet");
 // express app
 const app = express();
-app.use(helmet());
+// app.use(helmet());
 /**
  * -------------- DATABASE ----------------
  */
@@ -23,10 +23,10 @@ const dbString = process.env.MONGODB_URI;
 const dbOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true,
-  server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
-  replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+  // useFindAndModify: false,
+  // useCreateIndex: true,
+  // server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+  // replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
 };
 mongoose
   .connect(dbString, dbOptions)
@@ -57,7 +57,7 @@ app.use((req, res, next) => {
 /**
  * -------------- ROUTES ----------------
  */
-app.use(compression()); // Compress all routes
+// app.use(compression()); // Compress all routes
 app.use("/api/blogs", blogRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/comment", commentRoutes);
