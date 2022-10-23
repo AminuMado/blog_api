@@ -62,7 +62,7 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/comment", commentRoutes);
 
-//  make index.html a static file
+//Index page at default entry route
 app.route("/").get(function (req, res) {
   res.sendFile(process.cwd() + "/index.html");
 });
