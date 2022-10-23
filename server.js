@@ -5,9 +5,11 @@ const mongoose = require("mongoose");
 const blogRoutes = require("./routes/blogs");
 const userRoutes = require("./routes/user");
 const commentRoutes = require("./routes/comments");
+const compression = require("compression");
+const helmet = require("helmet");
 // express app
 const app = express();
-
+app.use(helmet());
 /**
  * -------------- DATABASE ----------------
  */
@@ -48,7 +50,7 @@ app.use((req, res, next) => {
 /**
  * -------------- ROUTES ----------------
  */
-
+app.use(compression()); // Compress all routes
 app.use("/api/blogs", blogRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/comment", commentRoutes);
