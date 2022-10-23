@@ -20,7 +20,14 @@ app.use(helmet());
  * MONGODB_URI=mongodb://<user>:<password>@localhost:27017/database_name
  */
 const dbString = process.env.MONGODB_URI;
-const dbOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+const dbOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+  server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+  replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+};
 mongoose
   .connect(dbString, dbOptions)
   .then(() => {
@@ -54,3 +61,8 @@ app.use(compression()); // Compress all routes
 app.use("/api/blogs", blogRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/comment", commentRoutes);
+
+//  make index.html a static file
+app.route("/").get(function (req, res) {
+  res.sendFile(process.cwd() + "/index.html");
+});
