@@ -7,9 +7,11 @@ const userRoutes = require("./routes/user");
 const commentRoutes = require("./routes/comments");
 const compression = require("compression");
 const helmet = require("helmet");
+const cors = require("cors");
 // express app
 const app = express();
-// app.use(helmet());
+app.use(cors());
+app.use(helmet());
 /**
  * -------------- DATABASE ----------------
  */
@@ -57,7 +59,7 @@ app.use((req, res, next) => {
 /**
  * -------------- ROUTES ----------------
  */
-// app.use(compression()); // Compress all routes
+app.use(compression()); // Compress all routes
 app.use("/api/blogs", blogRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/comment", commentRoutes);
